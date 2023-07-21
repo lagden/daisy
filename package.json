@@ -1,0 +1,45 @@
+{
+  "name": "@tadashi/daisy",
+  "version": "1.0.0",
+  "description": "Generate the theme's vars for use with DaisyUI library.",
+  "type": "module",
+  "main": "./src/daisy.js",
+  "browser": "./src/daisy.js",
+  "exports": {
+    ".": {
+      "browser": "./src/daisy.js",
+      "import": "./src/daisy.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "eslint": "eslint --ignore-path .gitignore .",
+    "pretest": "npm run eslint",
+    "test": "c8 --reporter=text --reporter=lcov ava"
+  },
+  "keywords": [
+    "got",
+    "request",
+    "helper"
+  ],
+  "author": "Thiago Lagden",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "colord": "2.9.3"
+  },
+  "devDependencies": {
+    "ava": "5.3.1",
+    "c8": "8.0.0",
+    "eslint": "8.45.0",
+    "eslint-plugin-unicorn": "48.0.0",
+    "jsdom": "22.1.0"
+  }
+}

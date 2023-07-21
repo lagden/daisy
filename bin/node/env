@@ -1,0 +1,50 @@
+#!/bin/bash
+
+DIR="$(cd $(dirname $0) && pwd)"
+BIN_DIR="$(cd $DIR/.. && pwd)"
+
+# Import functions
+. $BIN_DIR/helper/fn
+
+usage() {
+	cat <<-EOF
+
+  Usage: $0 [options...]
+
+  Options:
+    -e <staging|production>  Environment
+    -h                       Show usage
+
+EOF
+exit 0
+}
+
+# Go to current directory
+CURR_FOLDER="$(pwd)"
+cd $CURR_FOLDER
+
+unset OPT
+OPT="staging"
+
+unset OPT_AVAILABLE
+OPT_AVAILABLE=("staging" "production")
+
+while getopts "e:h" o
+do
+	case ${o} in
+		e) OPT=$OPTARG ;;
+		h) usage ;;
+		\?) usage ;;
+	esac
+done
+
+# Check option available
+[[ ! " ${OPT_AVAILABLE[*]} " =~ " ${OPT} " ]] && usage
+
+# ENV File
+load_env $OPT
+
+# Generate ENVs for frontend application
+gen_env "${CURR_FOLDER}/resource/env.js"
+
+exit 0

@@ -1,0 +1,25 @@
+#!/bin/sh
+
+DIR="$(cd $(dirname $0) && pwd)"
+BIN_DIR="$(cd $DIR/.. && pwd)"
+
+# Import functions
+. $BIN_DIR/helper/fn
+
+# Go to current directory
+CURR_FOLDER="$(pwd)"
+cd $CURR_FOLDER
+
+echo "PM ----> ${PM}"
+
+if test "${PM}" = "npm"; then
+	npm i --include=dev --ignore-scripts
+	npm run build
+fi
+
+if test "${PM}" = "pnpm"; then
+	pnpm i --dev
+	pnpm build
+fi
+
+ok "Build done"

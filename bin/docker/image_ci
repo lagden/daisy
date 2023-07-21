@@ -1,0 +1,101 @@
+#!/bin/bash
+
+DIR="$(cd $(dirname $0) && pwd)"
+BIN_DIR="$(cd $DIR/.. && pwd)"
+
+# Import functions
+. $BIN_DIR/helper/fn
+
+usage() {
+	cat <<-EOF
+
+  Usage: $0 [options...]
+
+  Options:
+    -e <staging|production>  Environment
+    -h                       Show usage
+
+EOF
+exit 0
+}
+
+# Go to current directory
+CURR_FOLDER="$(pwd)"
+cd $CURR_FOLDER
+
+unset OPT
+OPT="staging"
+
+unset OPT_AVAILABLE
+OPT_AVAILABLE=("staging" "production")
+
+while getopts "e:h" o
+do
+	case ${o} in
+		e) OPT=$OPTARG ;;
+		h) usage ;;
+		\?) usage ;;
+	esac
+done
+
+# Check option available
+[[ ! " ${OPT_AVAILABLE[*]} " =~ " ${OPT} " ]] && usage
+
+# ENV File
+load_env $OPT
+
+# Variables
+unset VERSION
+VERSION="${CI_COMMIT_TAG:-$CI_COMMIT_REF_NAME}"
+if test "${CI_COMMIT_BRANCH}" = "staging"; then
+	# VERSION="${CI_COMMIT_BRANCH}-${CI_COMMIT_SHORT_SHA}"
+	VERSION="${CI_COMMIT_BRANCH}"
+fi
+
+CI_APPLICATION_TAG="${CI_REGISTRY_IMAGE}:${VERSION}"
+CI_APPLICATION_TAG_LATEST="${CI_REGISTRY_IMAGE}:latest"
+DOCKER_TARGET_BUILD="${DOCKER_TARGET_BUILD:-main}"
+
+echo "------"
+echo "VERSION ${VERSION}"
+echo "CI_COMMIT_TAG ${CI_COMMIT_TAG}"
+echo "CI_APPLICATION_TAG ${CI_APPLICATION_TAG}"
+echo "CI_COMMIT_REF_NAME ${CI_COMMIT_REF_NAME}"
+echo "CI_COMMIT_BRANCH ${CI_COMMIT_BRANCH}"
+echo "CI_COMMIT_SHORT_SHA ${CI_COMMIT_SHORT_SHA}"
+echo "------"
+
+# Build
+docker build \
+	--build-arg VERSION=${VERSION} \
+	--build-arg NODE_ENV=${NODE_ENV} \
+	--build-arg PM=${PM:-npm} \
+	--target $DOCKER_TARGET_BUILD \
+	--compress \
+	--force-rm \
+	--tag $CI_APPLICATION_TAG \
+	--tag $CI_APPLICATION_TAG_LATEST \
+	--no-cache .
+
+test $? -ne 0 && abort "Falha no build da image --> ${CI_APPLICATION_TAG}" || ok "Build image ok --> ${CI_APPLICATION_TAG}"
+
+# Login
+echo $CI_REGISTRY_PASSWORD | docker login $CI_REGISTRY --username $CI_REGISTRY_USER --password-stdin
+test $? -ne 0 && abort "Falha no login --> ${CI_REGISTRY}" || ok "Logado com sucesso --> ${CI_REGISTRY}"
+
+# Push
+docker push $CI_APPLICATION_TAG
+
+# Push Latest
+if test "${OPT}" = "production"; then
+	docker push $CI_APPLICATION_TAG_LATEST
+fi
+
+# Image hash
+CI_IMAGE_SHA=$(docker inspect --format='{{index .RepoDigests 0}}' $CI_APPLICATION_TAG | cut -d ":" -f 2)
+echo "CI_APPLICATION_TAG=${CI_APPLICATION_TAG}" > $CURR_FOLDER/build-variables.env
+echo "CI_IMAGE_SHA=${CI_IMAGE_SHA}" >> $CURR_FOLDER/build-variables.env
+
+ok "Image build accomplished... Yeahh!!!"
+
+exit 0
