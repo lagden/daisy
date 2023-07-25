@@ -26,6 +26,13 @@ test('generate', t => {
 	t.snapshot(res, 'generate')
 })
 
+test('base-100', t => {
+	const res = convertColorFormat({
+		'base-100': '#282a36',
+	})
+	t.snapshot(res, 'base-100')
+})
+
 test('ignore state and use base-200', t => {
 	const res = convertColorFormat({
 		'primary': 'hsl(56deg 89% 78%)',

@@ -13,8 +13,9 @@ export function turnColorValuesToString(input) {
 }
 
 export function generateForegroundColorFrom(input, percentage = 0.8) {
-	const res = colord(input)
-		.mix(colord(input).isDark() ? 'white' : 'black', percentage)
+	const _color = colord(input)
+	const res = _color
+		.mix(_color.isDark() ? '#ffffff' : '#000000', percentage)
 		.toHsl()
 	return turnColorValuesToString(res)
 }

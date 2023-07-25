@@ -19,6 +19,7 @@ rules:
     -
       before: false
       after: true
+  # no-unused-vars: off
   no-console: off
   no-template-curly-in-string: off
   no-unused-expressions:

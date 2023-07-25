@@ -1,6 +1,6 @@
 {
   "name": "@tadashi/daisy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generate the theme's vars for use with DaisyUI library.",
   "type": "module",
   "main": "./src/daisy.js",
