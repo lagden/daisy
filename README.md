@@ -16,7 +16,7 @@
 ---
 
 
-Generate the theme's vars for use with [DaisyUI](https://daisyui.com/) library.
+Generate the theme's vars for use with [DaisyUI](https://daisyui.com/) library >= 4.
 
 
 ## Install
@@ -44,7 +44,7 @@ $ npm i @tadashi/daisy
     'error': '#e74671'
   })
 
-  updateCss('[data-theme="nimble"]', props)
+  updateCss('[data-theme="punk"]', props)
 </script>
 ```
 

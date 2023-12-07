@@ -1,18 +1,14 @@
 const colorNames = {
-	'primary': '--p',
-	'primary-focus': '--pf',
+	primary: '--p',
 	'primary-content': '--pc',
 
-	'secondary': '--s',
-	'secondary-focus': '--sf',
+	secondary: '--s',
 	'secondary-content': '--sc',
 
-	'accent': '--a',
-	'accent-focus': '--af',
+	accent: '--a',
 	'accent-content': '--ac',
 
-	'neutral': '--n',
-	'neutral-focus': '--nf',
+	neutral: '--n',
 	'neutral-content': '--nc',
 
 	'base-100': '--b1',
@@ -20,16 +16,16 @@ const colorNames = {
 	'base-300': '--b3',
 	'base-content': '--bc',
 
-	'info': '--in',
+	info: '--in',
 	'info-content': '--inc',
 
-	'success': '--su',
+	success: '--su',
 	'success-content': '--suc',
 
-	'warning': '--wa',
+	warning: '--wa',
 	'warning-content': '--wac',
 
-	'error': '--er',
+	error: '--er',
 	'error-content': '--erc',
 }
 

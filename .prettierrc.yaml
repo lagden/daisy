@@ -1,0 +1,16 @@
+arrowParens: avoid
+bracketSameLine: false
+bracketSpacing: false
+# embeddedLanguageFormatting: auto
+insertPragma: false
+htmlWhitespaceSensitivity: css
+printWidth: 720
+proseWrap: preserve
+quoteProps: as-needed
+requirePragma: false
+semi: false
+singleAttributePerLine: true
+singleQuote: true
+trailingComma: all
+tabWidth: 4
+useTabs: true

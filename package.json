@@ -1,9 +1,9 @@
 {
   "name": "@tadashi/daisy",
-  "version": "1.0.1",
-  "description": "Generate the theme's vars for use with DaisyUI library.",
+  "version": "2.0.0",
+  "description": "Generate the theme's vars for use with DaisyUI library >= 4.",
   "type": "module",
-  "main": "./src/daisy.js",
+  "main": "src/daisy.js",
   "browser": "./src/daisy.js",
   "exports": {
     ".": {
@@ -19,12 +19,14 @@
   ],
   "scripts": {
     "eslint": "eslint --ignore-path .gitignore .",
-    "pretest": "npm run eslint",
-    "test": "c8 --reporter=text --reporter=lcov ava"
+    "lint": "prettier --check . && npm run eslint",
+    "format": "prettier --write .",
+    "pretest": "npm run lint",
+    "test": "c8 --reporter=text --reporter=text-summary --reporter=lcovonly --reporter=cobertura node --test test/*.spec.js"
   },
   "keywords": [
-    "got",
-    "request",
+    "daisy",
+    "color",
     "helper"
   ],
   "author": "Thiago Lagden",
@@ -33,13 +35,14 @@
     "node": ">=18"
   },
   "dependencies": {
-    "colord": "2.9.3"
+    "culori": "3.3.0",
+    "picocolors": "1.0.0"
   },
   "devDependencies": {
-    "ava": "5.3.1",
-    "c8": "8.0.0",
-    "eslint": "8.45.0",
-    "eslint-plugin-unicorn": "48.0.0",
-    "jsdom": "22.1.0"
+    "c8": "8.0.1",
+    "eslint": "8.55.0",
+    "eslint-plugin-unicorn": "49.0.0",
+    "jsdom": "23.0.1",
+    "prettier": "3.1.0"
   }
 }
